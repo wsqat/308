@@ -63,8 +63,9 @@ class HuyaSpider(scrapy.Spider):
     def get_all_room(self, response):
         url = response.url
         html = requests.get(url).text
-        soup = BeautifulSoup(html, 'lxml')  
-        jn = json.loads(soup.text)
+        # soup = BeautifulSoup(html, 'lxml')  
+        # jn = json.loads(soup.text)
+        jn = json.loads(html)
         totalPage = jn['data']['totalPage']
         print "totalPage:"+str(totalPage)
         # totalPage = 2
@@ -78,8 +79,9 @@ class HuyaSpider(scrapy.Spider):
         url = response.url
         # for item in sort:
         html = requests.get(url).text
-        soup = BeautifulSoup(html, 'lxml')  
-        jn = json.loads(soup.text)
+        # soup = BeautifulSoup(html, 'lxml')  
+        # jn = json.loads(soup.text)
+        jn = json.loads(html)
         # totalPage = jn['data']['totalPage']
         dataArr = jn['data']['datas']
         for data in dataArr:
