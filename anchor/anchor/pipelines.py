@@ -20,9 +20,9 @@ class AnchorPipeline(object):
         # self.csvfile = open('anchor.csv', 'ab')  # douyu 重新写入
         # self.csvfile = open('panda.csv', 'wb')  # panda 重新写入
         # self.csvfile = open('douyu.csv', 'wb')  # douyu 重新写入
-        # self.csvfile = open('douyu3.csv', 'ab')  # douyu 重新写入
+        self.csvfile = open('douyu3.csv', 'ab')  # douyu 重新写入
         # self.csvfile = open('douyu1.csv', 'wb')  # douyu 重新写入
-        self.csvfile = open('douyu3.bak.csv', 'ab')  # data 重新写入
+        # self.csvfile = open('douyu3.bak.csv', 'ab')  # data 重新写入
         # self.csvfile = open('huya.csv', 'wb')  # huya 重新写入
         self.csvfile.write(codecs.BOM_UTF8) # 防止乱码
         self.csvwriter = csv.writer(self.csvfile,  delimiter=',') #将数据作为一系列以逗号分隔的值

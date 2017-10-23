@@ -26,7 +26,7 @@ class DouyuAnchorSpider(CrawlSpider):
     # start_urls = ['http://douyu.com/']
     base_url = "http://www.douyu.com/"
     room = 'http://open.douyucdn.cn/api/RoomApi/room/'
-    start_urls=['http://open.douyucdn.cn/api/RoomApi/room/%s' % i for i in [160000,400000,600000,8000000,9000000,10000000]]
+    start_urls=['http://open.douyucdn.cn/api/RoomApi/room/%s' % i for i in [600000,8000000,9000000,10000000]]
     # start_urls=['http://open.douyucdn.cn/api/RoomApi/room/%s' % i for i in range(15,100)]
     # rules = [
     #     Rule(LinkExtractor(allow=(r'http://open.douyucdn.cn/api/RoomApi/room/\d{2,7}$')), callback="get_room_info")
@@ -37,7 +37,8 @@ class DouyuAnchorSpider(CrawlSpider):
         # maxRoomId = 20
         # 140986
         # for roomId in range(1,int(maxRoomId)+1):
-        for roomId in range(153949,int(maxRoomId)+1):
+        # 153949 475812 484338 532177,567127
+        for roomId in range(567130,int(maxRoomId)+1):
             url = self.room + str(roomId)
             print url
             yield Request(url, dont_filter=True, callback=self.get_room_info)
