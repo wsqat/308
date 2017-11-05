@@ -21,6 +21,7 @@ class AnchorItem(scrapy.Item):
 	# 爬取时间 主播ID是主键和索引
 	# 爬取时间 crawlTime
     userName = scrapy.Field()
+    avatar = scrapy.Field() #主播头像
     # nickId = scrapy.Field()
     # imageurl = scrapy.Field()
     # city = scrapy.Field()
@@ -30,8 +31,9 @@ class AnchorItem(scrapy.Item):
     fans = scrapy.Field()
     roomUrl =  scrapy.Field()
     # fansNum = scrapy.Field()
-    
-    # weight = scrapy.Field()
+    # 打赏
+    reward = scrapy.Field()
+    plateform = scrapy.Field()
     # crawlTime = scrapy.Field()
 	# 房间标题 => %s
 	# 主播名称 => %s

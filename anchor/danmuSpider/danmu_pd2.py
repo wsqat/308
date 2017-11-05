@@ -7,7 +7,7 @@ import socket
 import json
 import time
 import threading
-import os
+import os,datetime
 import platform
 import re,sys,codecs
 
@@ -34,10 +34,24 @@ def pp(msg):
         decode(sys.stdin.encoding))
     
 def addMsg(msg,roomid):
+    try:
+        folder = datetime.datetime.now().strftime('%Y-%m-%d')
+        File_Path = os.getcwd()+"/"+folder      #获取到当前文件的目录，并检查是否有report文件夹，如果不存在则自动新建report文件
+        if not os.path.exists(File_Path):
+            os.makedirs(File_Path)
+        # os.makedirs(File_Path)
+        # print ("路径被创建")
+        path = File_Path+"/"+"panda_"+roomid+".txt"
+        # print(path)
+        file=codecs.open(path,"a","utf-8");
+        file.write('\n'+msg)
+        file.close()    
+    except Exception as e:
+        print(e)
+        # raise e
     # file = open("pandaChat"+roomid+".txt", "a")
-    file = open("pandaDanmu"+roomid+".txt", "a")
-    file.write('\n'+msg)
-    file.close()
+    # file = open("pandaDanmu"+roomid+".txt", "a")
+    
 
 def loadInit():
     with open(INIT_PROPERTIES, 'r') as f:
@@ -83,7 +97,7 @@ def getChatInfo(roomid):
         s.sendall(sendMsg)
         recvMsg = s.recv(CHECK_LEN)
         if recvMsg == FIRST_RPS:
-            print('成功连接弹幕服务器')
+            print(' 成功连接房间号为['+str(roomid)+']弹幕服务器')
             recvLen = int.from_bytes(s.recv(2), 'big')
             s.recv(recvLen)
         def keepalive():
@@ -143,7 +157,13 @@ def formatMsg(recvMsg, roomid):
         # print(nickName + ":" + content)
         # msg=",".join([str(time.time()),nickName,content])
         msg = content
-        addMsg(msg,roomid)
+        try:
+            addMsg(msg,roomid)
+        except Exception as e:
+            print(e)
+            # print(e.message)
+            # raise e
+        
         
         # notify(nickName, content)
 
@@ -183,7 +203,8 @@ def testRoomid(roomid):
 def main():
     roomids = loadInit()
     print(roomids)
-    # roomid = testRoomid(roomid)
+    roomids = testRoomid(roomids)
+    print(roomids)
     # getChatInfo(roomid)
     for roomid in roomids:
         threading.Thread(target=getChatInfo, args=([roomid])).start()

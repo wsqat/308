@@ -1,61 +1,42 @@
-# coding: utf-8
+# -*- coding: utf-8 -*-
 
-import requests, gevent, time
-from pyquery import PyQuery
-from gevent import monkey; monkey.patch_all()
-from gevent.queue import Queue
+from scrapy import cmdline
+import time  
+from threading import Timer  
+from datetime import datetime, timedelta  
+from time import sleep  
 
+from functions import writeDanmuFile
+# from danmuSpider.main import *
 import sys
-reload(sys)
-sys.setdefaultencoding('utf8')
+# from anchor.writeDanmuFile
+# sys.path.append("..")
+# import danmuSpider.main
+  
+SECONDS_PER_DAY = 24 * 60 * 60  
+  
+def run_crawlall( enter_time ):  
+    cmdline.execute("scrapy crawlall".split())
+    print "now is "+str(datetime.now()) + "run_crawlall time is " + str(enter_time)
 
-def get_director():
-    directory_queue = Queue()
-    html = requests.get('http://www.douyu.com/directory').text
-    pq = PyQuery(html)
-    size = pq.find('.unit').size()
-    for index in range(size):
-        item = pq.find('.unit').eq(index)
-        name = item.find('p').text()
-        url = item.find('a').attr('href')
-        img = item.find('img').attr('data-original')
-        directory_queue.put({
-            'name': name,
-            'url': 'http://www.douyu.com' + url,
-            'img': img
-        })
-    return directory_queue
+def run_anchor( enter_time ):  
+    # cmdline.execute("scrapy crawlall".split())
+    writeDanmuFile()
+    print "now is "+str(datetime.now()) + "run_crawlall time is " + str(enter_time)
 
-def get_rooms(queue):
-    while not queue.empty():
-        directory_info = queue.get_nowait()
-        print('[%s]Getting Directory => %s'%(gevent.getcurrent(), directory_info['name']))
-        html = requests.get(directory_info['url']).text
-        pq = PyQuery(html)
-        size = pq.find('#live-list-contentbox > li').size()
-        for index in range(size):
-            item = pq.find('#live-list-contentbox > li').eq(index)
-            title = item.find('a').attr('title')
-            url = 'http://www.douyu.com' + item.find('a').attr('href')
-            username = item.find('.dy-name').text()
-            cat = directory_info['name']
-            viewers = item.find('.dy-num').text()
-            content = '''
-房间标题 => %s
-主播名称 => %s
-观众数量 => %s
-分类栏目 => %s
-房间链接 => %s
-'''%(title, username, viewers, cat, url)
-            with open('result.txt', 'a') as f:
-                f.write(content)
-if __name__ == '__main__':
-    start = time.time()
-    gevent_list = []
-    directory_queue = get_director()
-    for index in range(20):
-        gevent_list.append(
-            gevent.spawn(get_rooms, directory_queue)
-        )
-    gevent.joinall(gevent_list)
-    print('Total run time: %s' %(str(time.time()-start)))
+# 规定某个时候执行此函数
+def doFirst():  
+    curTime = datetime.now()
+    print curTime
+    # 当前执行时间
+    desTime = curTime.replace(year=2017,month=11,day=1,hour=18, minute=48, second=31, microsecond=0)  
+    print desTime  
+    delta = desTime-curTime  
+    sleeptime = delta.total_seconds()  
+    print "Now day must sleep "+str(sleeptime)+ " seconds"
+    sleep(sleeptime)  
+    # run_crawlall(datetime.now())  
+    run_anchor(datetime.now())
+
+if __name__ == "__main__":  
+    doFirst()

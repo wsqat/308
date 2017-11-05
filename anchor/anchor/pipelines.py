@@ -8,35 +8,38 @@ import csv
 import itertools
 import codecs
 import pymysql
+import datetime
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
+count = 0
+starttime = datetime.datetime.now()
+print "开始时间为：" + str(starttime)
+
+filename = datetime.datetime.now().strftime('%Y-%m-%d')
+csvfile = open(filename+'.csv', 'ab')  # douyu 重新写入
+# self.csvfile = open('huya.csv', 'wb')  # huya 重新写入
+csvfile.write(codecs.BOM_UTF8) # 防止乱码
+csvwriter = csv.writer(csvfile,  delimiter=',') #将数据作为一系列以逗号分隔的值
+global count
+if count == 0:
+    csvwriter.writerow(['userName', 'avatar','roomName', 'plateform','category', 'fans', 'reward', 'roomUrl'])
+
 class AnchorPipeline(object):
 
-    def __init__(self):
+    # def __init__(self):
         # 写入csv文件
-        # self.csvfile = open('data.csv', 'wb')  # douyu 重新写入
-        # self.csvfile = open('anchor.csv', 'ab')  # douyu 重新写入
-        # self.csvfile = open('panda.csv', 'wb')  # panda 重新写入
-        # self.csvfile = open('douyu.csv', 'wb')  # douyu 重新写入
-        self.csvfile = open('douyu3.csv', 'ab')  # douyu 重新写入
-        # self.csvfile = open('douyu1.csv', 'wb')  # douyu 重新写入
-        # self.csvfile = open('douyu3.bak.csv', 'ab')  # data 重新写入
-        # self.csvfile = open('huya.csv', 'wb')  # huya 重新写入
-        self.csvfile.write(codecs.BOM_UTF8) # 防止乱码
-        self.csvwriter = csv.writer(self.csvfile,  delimiter=',') #将数据作为一系列以逗号分隔的值
+        # self.csvfile = open('douyu3.csv', 'ab')  # douyu 重新写入
         # self.csvwriter.writerow(['userName', 'roomName', 'category', 'fans', 'roomUrl'])
-        self.count = 0
+        # self.count = 0
         # 写入mysql数据库
         # self.conn = pymysql.connect(host="127.0.0.1", user="root", password="123456", db="xiaoshuo_db")
         # self.conn.set_charset("utf8")
-
     def process_item(self, item, spider):
         # 写入csv文件
-        row = [item['userName'], item['roomName'], item['category'],item['fans'], item['roomUrl']]
-        self.csvwriter.writerow(row)
-
+        row = [item['userName'], item['avatar'],item['roomName'],item['plateform'], item['category'],item['fans'],item['reward'], item['roomUrl']]
+        csvwriter.writerow(row)
         # 写入mysql
         # name = item["novel_name"]
         # author = item["author"]
@@ -51,7 +54,7 @@ class AnchorPipeline(object):
         # sql = "insert into novel(name,author,url,status,number,category,collect,click,month) " \
         #       "values ('" + name + "','" + author + "','" + url + "','" + status + "','" + str(number) + "','" + category + "','" + str(collect) + "','" + str(click) + "','" + str(month) + "');"
         # print(sql)
-
+        
         # cursor = self.conn.cursor()
         # try:
         #     cursor.execute(sql)
@@ -60,12 +63,12 @@ class AnchorPipeline(object):
         #     print(e)
         #     self.conn.rollback()
         #     # pass
-        self.count = self.count + 1
-        # print "抓取起点小说网第"+str(self.count)+"条记录"
-        # print "抓取起点女生网第"+str(self.count)+"条记录"
-        print "抓取第" + str(self.count) + "条记录"
+        global count
+        count += 1
+        print "抓取第" + str(count) + "条记录"
         return item
 
-    # def close_spider(self):
-    #     # 关闭conn连接
-    #     self.conn.close()
+    def close_spider(self, spider):
+        endtime = datetime.datetime.now()
+        print "结束时间为：" + str(endtime)
+        print "总共执行时间为："+str((endtime - starttime).seconds)+" s"

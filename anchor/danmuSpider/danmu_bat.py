@@ -26,16 +26,22 @@ if __name__ == '__main__':
     # 需要执行的命令列表  
     # cmds = ['ls','pwd']
     cmds = []
-    roomIDArr = [138286, 71017, 67373, 688, 56040, 65251, 96291, 7911, 138243, 4809, 10903, 93912, 1229, 71415, 4332, 85981, 60062, 17349, 122402, 78561, 1991931]
-    for x in range(1,21):
-        room = 'http://open.douyucdn.cn/api/RoomApi/room/'
-        url = room + str(roomIDArr[x])
-        # print url
-        html = requests.get(url).text
-        jn = json.loads(html)
-        room_status = int(jn['data']['room_status'])
-        if room_status == 1:
-            print roomIDArr[x]
+    # roomIDArr = [138286, 71017, 67373, 688, 56040, 65251, 96291, 7911, 138243, 4809, 10903, 93912, 1229, 71415, 4332, 85981, 60062, 17349, 122402, 78561, 1991931]
+    # roomIDs = [138286, 688, 96291, 10903, 93912, 1229] #71017
+    # roomIDs = [2371789, 67373, 688, 65251, 96291, 7911, 93912, 1229]
+    roomIDs = [1368050,2098459,3552471]
+    # for x in range(1,21):
+    for roomid in roomIDs:
+        cmds.append("python danmu3.py "+str(roomid))
+        print "python danmu3.py "+str(roomid)
+        # room = 'http://open.douyucdn.cn/api/RoomApi/room/'
+        # url = room + str(roomid)
+        # # print url
+        # html = requests.get(url).text
+        # jn = json.loads(html)
+        # room_status = int(jn['data']['room_status'])
+        # if room_status == 1:
+        #     print roomid
        	    # cmds.append("python danmu3.py "+str(x))
       
     #线程池  

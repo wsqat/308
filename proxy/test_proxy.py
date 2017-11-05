@@ -15,7 +15,9 @@ from multiprocessing.dummy import Pool as ThreadPool
 # 定义全局变量
 # dir_path = '/Users/ehco/Desktop/result/'
 # /Users/shiqingwang/Desktop/308/proxy/result/kdl_proxy.txt
-dir_path = '/Users/shiqingwang/Desktop/308/proxy/result/'
+# /Users/shiqingwang/Desktop/308/308/proxy/result
+# dir_path = '/Users/shiqingwang/Desktop/308/proxy/result/'
+dir_path = '/Users/shiqingwang/Desktop/308/308/proxy/result/'
 alive_ip = []
 
 # 使得map并发！实例化pool对象

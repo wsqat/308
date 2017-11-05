@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import scrapy
-import datetime
+import datetime,re
 from scrapy.loader import ItemLoader
 from anchor.items import AnchorItem
 from anchor.utils.ListUtils import trim_list
@@ -32,6 +32,8 @@ class PandaSpider(scrapy.Spider):
                     for category in category_list for address in address_list):
             yield scrapy.Request(url=url, callback=self.parse_room_url, dont_filter=True)
             # return
+        # url = "http://www.panda.tv/ajax_search?token=&name=&class=lol&order_cond=fans&province=&pagenum=20&pageno=1"
+        # yield scrapy.Request(url=url, callback=self.parse_room_url, dont_filter=True)
 
     # 提取出房间信息，并且 yield 下一个页面
     def parse_room_url(self, response):
@@ -64,19 +66,36 @@ class PandaSpider(scrapy.Spider):
             room_url = "https://www.panda.tv/" + room_host['roomid']
             anchorItem = AnchorItem()
             anchorItem['userName'] = room_host['nickname']
+
             anchorItem['roomName'] = room_host['name']
             # anchorItem['audience'] = room_host['fans']
             anchorItem['fans'] = room_host['fans']
             anchorItem['roomUrl'] = room_url
-            anchorItem['category'] = room_host['class']
-            yield anchorItem
-
+            # anchorItem['category'] = room_host['class']
+            anchorItem['category'] = room_host['classification']
+            anchorItem['plateform'] = u"熊猫"
+            anchorItem['reward'] = float(room_host['bamboos'])/1000
+            # yield anchorItem
+            yield scrapy.Request(room_url, dont_filter=True, callback=self.get_room_info, meta={'anchorItem': anchorItem})
             # yield scrapy.Request(url=room_url, callback=self.parse_room_detail, meta={"item": item}, dont_filter=True)
 
         next_url = url[:url.rfind('=') + 1] + str(int(url[url.rfind('=') + 1:]) + 1)
 
         yield scrapy.Request(url=next_url,
                              callback=self.parse, dont_filter=True)
+
+    # 获取主播头像
+    def get_room_info(self, response):
+        # print baseurl
+        myPgae = response.body
+        unicodePage = myPgae.decode('utf-8')
+        avatar = re.findall(r'"avatar":"(.*?)","bamboos"', unicodePage, re.S)  # 获取当前页面的Table
+        anchorItem = response.meta['anchorItem']
+        anchorItem['avatar'] = str(avatar[0])
+        # print anchorItem
+        yield anchorItem
+
+
 
     # 提取出房间的信息，并拼接出各项API
     def parse_room_detail(self, response):

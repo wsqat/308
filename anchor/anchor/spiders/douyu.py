@@ -18,13 +18,14 @@ class DouyuSpider(scrapy.Spider):
     name = 'douyu'
     allowed_domains = ['douyu.com']
     # start_urls = ['http://douyu.com/']
-    base_url = "http://www.douyu.com"
+    base_url = "http://www.douyu.com/"
     start_urls = ['http://www.douyu.com/directory']
 
     host = 'http://api.douyutv.com/api/v1/live/'
     all_game = 'http://open.douyucdn.cn/api/RoomApi/game'
     # http://open.douyucdn.cn/api/RoomApi/live/lol?limit=90&offset=1100
     live_url = 'http://open.douyucdn.cn/api/RoomApi/live/'
+    room = 'http://open.douyucdn.cn/api/RoomApi/room/'
     sort = []
 
     def start_requests(self):
@@ -46,6 +47,7 @@ class DouyuSpider(scrapy.Spider):
             #    maxPage = 1894
             # if (str(item['short_name']) == u"wzry"):
             maxPage = 6
+            # maxPage = 2
             for pageNo in range(1,int(maxPage)+1):
                 # url = self.live_url + str(item['short_name']) + "?limit=90&offset=" + str(pageNo)
                 offset = (pageNo-1)*90
@@ -87,10 +89,65 @@ class DouyuSpider(scrapy.Spider):
                         anchorItem['roomName'] = data['room_name']
                         # anchorItem['audience'] = data['']
                         anchorItem['fans'] = data['fans']
-                        room_url = self.base_url+str( data['url'])
+                        room_url = self.base_url+str( data['room_id'])
                         anchorItem['roomUrl'] = room_url
                         anchorItem['category'] = data['game_name']
-                        yield anchorItem
+                        anchorItem['avatar'] = data['avatar']
+                        anchorItem['plateform'] = u"斗鱼"
+                        # reward = data['owner_weight']
+                        # 1t=1000kg=1000000g=1000000鱼丸=100W鱼丸
+                        # print reward
+                        # 1t = 1千
+                        # if "t" in reward :
+                        #     reward = float(reward[:-1])*1000
+                        # elif "kg" in reward:
+                        #     reward = float(reward[:-2])
+                        # else :
+                        #     reward = float(reward[:-1])/1000
+                        # anchorItem['reward'] = reward
+                        # print reward
+                        # print anchorItem
+                        # yield anchorItem
+                        url = self.room + str( data['room_id'])
+
+                        yield Request(url=url, dont_filter=True, callback=self.get_room_reward, meta={'anchorItem': anchorItem})
             except Exception as e:
+                print "error:"
+                print e
                 pass
 
+
+    # 获取房间信息
+    def get_room_reward(self, response):
+        url = response.url
+        # jn = self.parserURL(url)
+        html = requests.get(url).text
+        # soup = BeautifulSoup(html, 'lxml')
+        # jn = json.loads(soup.text)
+        jn = json.loads(html)
+        
+        anchorItem = response.meta['anchorItem']
+
+        errCode = int(jn['error'])
+        # print errCode
+        # print jn['data']
+        if errCode == 0:
+            # print "errCode:"+str(errCode)
+            data = jn['data']
+            # print data['owner_name']
+            if len(data):
+                reward = data['owner_weight']
+                # 1t=1000kg=1000000g=1000000鱼丸=100W鱼丸
+                # print reward
+                # 1t = 1千
+                if "t" in reward :
+                    reward = float(reward[:-1])*1000
+                elif "kg" in reward:
+                    reward = float(reward[:-2])
+                else :
+                    reward = float(reward[:-1])/1000
+                anchorItem['reward'] = reward
+                # anchorItem = response.meta['anchorItem']
+                print anchorItem
+                # return ""
+                yield anchorItem

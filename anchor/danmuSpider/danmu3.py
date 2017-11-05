@@ -5,7 +5,7 @@
 '''
 
 import time, sys
-import codecs
+import codecs,os
 from danmu import DanMuClient
 import csv,requests,json
 import pandas as pd
@@ -15,6 +15,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 from danmu import DanMuClient
 import threading
+from time import sleep
+import datetime
 
 # anchor_name = []
 # anchor_roomUrl = []
@@ -26,7 +28,14 @@ def pp(msg):
     
 def addMsg(msg,roomID):
     # f=codecs.open("douyuChat"+roomID+".txt","a","utf-8");
-    f=codecs.open("douyuDanmu"+roomID+".txt","a","utf-8");
+    # f=codecs.open("douyuDanmu_1023_"+roomID+".txt","a","utf-8");
+    # folder = "2017-10-27"
+    folder = datetime.datetime.now().strftime('%Y-%m-%d')
+    File_Path = ''+folder+''      #获取到当前文件的目录，并检查是否有report文件夹，如果不存在则自动新建report文件
+    if not os.path.exists(File_Path):
+        print os.makedirs(File_Path)
+    path = os.getcwd()+"/"+folder+"/"+"douyuDanmu_"+roomID+".txt"
+    f=codecs.open(path,"a","utf-8");
     f.write('\n'+msg);
     f.close();
 
@@ -113,12 +122,18 @@ if __name__ == "__main__":
     # path = "rank_list_douyu.txt"
     # get_douyu_roomUrl(path)
     # anchor_roomId.append("1991931")
-    roomIDs = [138286, 71017, 67373, 688, 56040, 65251, 96291, 7911, 138243, 4809, 10903, 93912, 1229, 71415, 4332, 85981, 60062, 17349, 122402, 78561, 1991931]
+    # roomIDs = [138286, 71017, 67373, 688, 56040, 65251, 96291, 7911, 138243, 4809, 10903, 93912, 1229, 71415, 4332, 85981, 60062, 17349, 122402, 78561, 1991931]
     # print anchor_roomId
     # print len(anchor_roomId)
+
+    # roomIDs = [56040]
+    # 2371789 阿冷, 71017 冯提莫, 138286 五五开,67373 陈一发, 688 张大仙, 56040 油条, 
+    # 65251 七哥张琪格, 96291 东北大鹌鹑, 7911 韦神, 138243 洞主, 4809 饼干狂魔MasterB
+    # 10903 guoyun丶mini, 93912 黑白锐雯, 1229 嗨氏
+    # roomIDs = [2371789,71017,138286,67373,688,56040,65251,96291,7911,138243,4809,10903,93912,1229]
+    # roomIDs = [71017, 138286, 688, 96291, 10903, 93912, 1229]
     args=sys.argv
-    # roomIDDs = [4332, 122402, 78561, 1991931]
-    # print(args)
+    print(args)
     if(len(args)==2):
         # roomIDIndex=int(args[1])
         # roomID = str(roomIDArr[roomIDIndex])
@@ -130,4 +145,23 @@ if __name__ == "__main__":
     # print roomIDs
     # for roomId in roomIDs:
     #     threading.Thread(target=begin, args=([roomId])).start()
+    # for roomid in roomIDs:
+    # threading.Thread(target=begin, args=([71017])).start()
+    # threading.Thread(target=begin, args=([138286])).start()
+    # threading.Thread(target=begin, args=([688])).start()
+    #线程池  
+    # threads = []
+    # for roomId in roomIDs:
+    #     th = threading.Thread(target=begin, args=([roomId]))  
+    #     threads.append(th)
+    #     sleep(100)
+    #     th.start()
+           
+    # # 等待线程运行完毕  
+    # for th in threads:  
+    #     th.join()
+
+    # threading.Thread(target=begin, args=([10903])).start()
+    # threading.Thread(target=begin, args=([93912])).start()
+    # threading.Thread(target=begin, args=([roomId])).start()
     # begin(roomId)

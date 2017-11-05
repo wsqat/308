@@ -162,8 +162,10 @@ def testRoomid(roomid):
 
 def main():
     roomid = loadInit()
+    print roomid
     roomid = testRoomid(roomid)
-    getChatInfo(roomid)
+    print roomid
+    # getChatInfo(roomid)
 
 if __name__ == '__main__':
     main()

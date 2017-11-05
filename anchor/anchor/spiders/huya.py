@@ -67,7 +67,7 @@ class HuyaSpider(scrapy.Spider):
         # jn = json.loads(soup.text)
         jn = json.loads(html)
         totalPage = jn['data']['totalPage']
-        print "totalPage:"+str(totalPage)
+        # print "totalPage:"+str(totalPage)
         # totalPage = 2
         for pageNo in range(1,int(totalPage)+1):
         	url = self.all_live_url + str(pageNo)
@@ -86,15 +86,16 @@ class HuyaSpider(scrapy.Spider):
         dataArr = jn['data']['datas']
         for data in dataArr:
             room_url =  self.host + data['privateHost']
-            print room_url
+            # print room_url
             # self.sort.append(room_url)
             anchorItem = AnchorItem()
             anchorItem['userName'] = data['nick']
             anchorItem['roomName'] = data['roomName']
             # anchorItem['audience'] = data['']
-            # anchorItem['fans'] = data['fans']
+            anchorItem['avatar'] = data['avatar180']
             anchorItem['roomUrl'] = room_url
             anchorItem['category'] = data['gameFullName']
+            anchorItem['plateform'] = u"虎牙"
             # yield anchorItem
             yield Request(room_url, dont_filter=True, callback=self.get_room_info, meta={'anchorItem': anchorItem})
         # return "
@@ -107,5 +108,7 @@ class HuyaSpider(scrapy.Spider):
         # print "fans:"+str(fans)
         anchorItem = response.meta['anchorItem']
         anchorItem['fans'] = fans
+        anchorItem['reward'] = float(0)
+        # print anchorItem
         yield anchorItem
 
