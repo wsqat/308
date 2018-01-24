@@ -75,9 +75,9 @@ sleep(128) #sleep(40000) 抓取所有页面
 ```
 
 
-# 电影
+# 二、电影
 
-## fetch_baidu_index 百度指数抓取
+## 1、百度指数 fetch_baidu_index
 > 目的：本项目主要是用来抓取百度指数的值。因为百度指数为了防止抓取，将数字转成了图片。
 
 ### 运行步骤:
@@ -100,7 +100,7 @@ sleep(128) #sleep(40000) 抓取所有页面
 6.执行 python main.py
 
 
-## dbmoive 豆瓣电影短评
+## 2、豆瓣电影短评 dbmoive 
 
 ### 参数设置
 > 修改 dbmovie/dbmovie/spiders/comments.py
@@ -124,7 +124,7 @@ def start_requests(self):
 - 数据的接口调用的是豆瓣电影api(官方)，文档地址：https://developers.douban.com/wiki/?title=movie_v2
 - 豆瓣电影评论信息接口调用的api(非官方)，github地址：https://github.com/jokermonn/-Api/blob/master/DoubanMovie.md
 
-## movieSpider 抓取糯米电影的部分
+## 3、糯米电影的用户画像 movieSpider
 > 糯米票房网站：piaofang.baidu.com
 
 每次运行代码之前
@@ -170,7 +170,7 @@ def start_requests(self):
 
 ```
 
-# 直播
+# 三、直播
 
 ## proxy 获取IP代理池
 scrapy crwal kdlspider #获取免费IP池   
