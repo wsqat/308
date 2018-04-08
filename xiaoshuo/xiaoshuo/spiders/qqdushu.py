@@ -50,8 +50,8 @@ class QQdushu(scrapy.Spider):
                 # serialstatus = serial[0]
                 # serialnumber = serial[1]
                 targentcontent = XiaoshuoItem()
-                targentcontent['novel_name'] = novel_name
-                targentcontent['author'] = author
+                targentcontent['novel_name'] = novel_name.strip()
+                targentcontent['author'] = author.strip()
                 targentcontent['novelurl'] = novelurl
                 targentcontent['category'] = category
                 # < span class ="book_click" > 2013-10-21 < / span >

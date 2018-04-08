@@ -6,6 +6,9 @@ from datetime import datetime, timedelta
 from time import sleep  
 import sort as st
 import os
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 SECONDS_PER_DAY = 24 * 60 * 60  
   
@@ -30,7 +33,15 @@ if __name__ == "__main__":
     # 爬去小说数据
     # doFirst()
     # run_crawlall(datetime.now())
-
+    # cmdline.execute("scrapy crawl seventeen".split())
+    # cmdline.execute("scrapy crawl chuangshi".split())
+    # cmdline.execute("scrapy crawl zongheng".split())
+    # cmdline.execute("scrapy crawl xxsy".split())
+    # cmdline.execute("scrapy crawl qidian".split())
+    # cmdline.execute("scrapy crawl qidianmm".split())
+    # cmdline.execute("scrapy crawl qqdushu".split())
+    # 创建子进程之前声明的变量
+    # st.main()
     try:
         pid = os.fork()
         if pid == 0:  # 子进程
@@ -43,16 +54,22 @@ if __name__ == "__main__":
                     print "this is child process. run qqdushu"
                     cmdline.execute("scrapy crawl qqdushu".split())
                 else:
+                    import time
+                    time.sleep(9)
                     print "this is child process. run qidianmm"
                     cmdline.execute("scrapy crawl qidianmm".split())
             else:
                 ppppid = os.fork()
                 if ppppid == 0:
-                    print "this is child process. run qidia"
+                    import time
+                    time.sleep(6)
+                    print "this is child process. run qidian"
                     cmdline.execute("scrapy crawl qidian".split())
                 else:
+                    import time
+                    time.sleep(12)
                     print "this is child process. run xxsy"
-                    cmdline.execute("scrapy crawl xxsy".split())
+                    # cmdline.execute("scrapy crawl xxsy".split())
             # sleep(10)
             print "this is child process end."
         else:  # 父进程
@@ -66,15 +83,19 @@ if __name__ == "__main__":
                     print "this is child process. run zongheng"
                     cmdline.execute("scrapy crawl zongheng".split())
                 else:
+                    import time
+                    time.sleep(9)
                     print "this is child process. run chuangshi"
                     cmdline.execute("scrapy crawl chuangshi".split())
             else:
                 ppppid3 = os.fork()
                 if ppppid3 == 0:
+                    import time
+                    time.sleep(6)
                     print "this is child process. run seventeen"
                     cmdline.execute("scrapy crawl seventeen".split())
                 else:
-                    sleep(128) #sleep(40000) 抓取所有页面
+                    sleep(300)
                     st.main()
                     print "this is parent process. exe st()"
             print "this is parent process end."

@@ -25,6 +25,7 @@ class XiaoshuoPipeline(object):
         # filename = "data/"+now_date+"_2.csv"
         # filename = "data/"+now_date+"_1.csv"
         filename = "data/"+now_date+".csv"
+        # filename = "data/"+now_date+"_qidian.csv"
         # filename = "data/"+now_date+"_chuangshi.csv"
         # filename = "data/" + now_date + "_17k.csv"
         # filename = "data/" + now_date + "_zhongheng.csv"
@@ -45,6 +46,8 @@ class XiaoshuoPipeline(object):
         # 写入csv文件
         row = [item['novel_name'], item['author'], item['novelurl'],item['serialstatus'], item['serialnumber'], item['category'],
                     item['collect_num_total'], item['click_num_total'], item['click_num_month']]
+        # import time
+        # time.sleep(10)
         self.csvwriter.writerow(row)
 
         # 写入mysql
@@ -73,7 +76,7 @@ class XiaoshuoPipeline(object):
 
         global count
         count += 1
-        # print "抓取起点小说网第"+str(self.count)+"条记录"
+        # print "抓取起点中文网第"+str(count)+"条记录"
         # print "抓取起点女生网第"+str(self.count)+"条记录"
         print "抓取第" + str(count) + "条记录"
         return item

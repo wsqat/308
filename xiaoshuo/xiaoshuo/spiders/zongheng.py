@@ -66,8 +66,8 @@ class ZhongHeng(scrapy.Spider):
                 # author = nameinfo.xpath('li/span[4]/a/text()').extract()[0]
                 # print author
                 targentcontent = XiaoshuoItem()
-                targentcontent['novel_name'] = novel_name
-                targentcontent['author'] = author
+                targentcontent['novel_name'] = novel_name.strip()
+                targentcontent['author'] = author.strip()
                 targentcontent['novelurl'] = novelurl
                 targentcontent['category'] = category
                 targentcontent['serialnumber'] = int(serialnumber)

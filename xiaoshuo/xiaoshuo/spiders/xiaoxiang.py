@@ -64,8 +64,8 @@ class XXSY(scrapy.Spider):
                 serialnumber = int(info[5].split("：")[1])
 
                 targentcontent = XiaoshuoItem()
-                targentcontent['novel_name'] = novel_name
-                targentcontent['author'] = author
+                targentcontent['novel_name'] = novel_name.strip()
+                targentcontent['author'] = author.strip()
                 targentcontent['novelurl'] = novelurl
                 targentcontent['serialstatus'] = serialstatus
                 targentcontent['serialnumber'] = serialnumber

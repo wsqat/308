@@ -86,8 +86,8 @@ class Chuangshi(scrapy.Spider):
         # print serialstatus
 
         targentcontent = XiaoshuoItem()
-        targentcontent['novel_name'] = novel_name
-        targentcontent['author'] = author
+        targentcontent['novel_name'] = novel_name.strip()
+        targentcontent['author'] = author.strip()
         targentcontent['novelurl'] = novelurl
         targentcontent['serialstatus'] = serialstatus
         targentcontent['serialnumber'] = serialnumber

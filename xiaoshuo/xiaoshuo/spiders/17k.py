@@ -83,8 +83,8 @@ class SeventeenK(scrapy.Spider):
                 serialstatus = re.findall(r'<em class="fc2">(.*?)</em>', nameinfo, re.S)[0]
                 serialstatus = serialstatus.strip()
                 targentcontent = XiaoshuoItem()
-                targentcontent['novel_name'] = novel_name
-                targentcontent['author'] = author
+                targentcontent['novel_name'] = novel_name.strip()
+                targentcontent['author'] = author.strip()
                 targentcontent['novelurl'] = novelurl
                 targentcontent['category'] = category
                 targentcontent['serialnumber'] = serialnumber

@@ -6,7 +6,7 @@ import os
 import sys
 reload(sys)
 # sys.setdefaultencoding('utf-8')
-sys.setdefaultencoding('utf_8_sig')
+sys.setdefaultencoding('utf-8')
 from datetime import datetime
 
 # 生成cvs文件, 过滤数据, 清洗数据 
@@ -38,12 +38,12 @@ def sort_by_key(fname,newfname,key):
     # lc=lc.drop_duplicates(['userName'])
     # print lc.
     # print lc.head(5)
-    print lc.__len__()
+    # print lc.__len__()
     # lc.drop_duplicates([2]) # 默认所有列，无重复记录
     # lc.ix[:, (lc != lc.ix[0]).any()]
     lc = lc.drop_duplicates(['novelurl'])
     # print lc.head(5)
-    print lc.__len__()
+    # print lc.__len__()
     # new = lc.sort_values(by=['month'],ascending=True)
     # new = new.tail(20)
     lc = lc[lc['month']>500]
@@ -101,10 +101,11 @@ def main():
     pure_cvs_row(filename, 'data/pure_data_month.csv', delimiter=',', key='month')
     # 历史点击排行榜
     pure_cvs_row(filename, 'data/pure_data_reviews.csv', delimiter=',', key='reviews')
-    # 历史收藏榜
-    pure_cvs_row(filename, 'data/pure_data_collects.csv', delimiter=',', key='collects')
     # 热门作者
     pure_cvs_row(filename, 'data/pure_data_author.csv', delimiter=',', key='author')
+    # 历史收藏榜
+    pure_cvs_row(filename, 'data/pure_data_collects.csv', delimiter=',', key='collects')
+
 
 if __name__ == '__main__':
     main()
